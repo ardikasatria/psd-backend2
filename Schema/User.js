@@ -1,17 +1,10 @@
 import mongoose, { Schema } from "mongoose";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from 'url';
 
-// Recreate __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Set profile images folder
-const profile_imgs_folder = path.join(__dirname, 'public', 'avatars');
-let profile_imgs = fs.readdirSync(profile_imgs_folder).map(file => `/avatars/${file}`);
+let profile_imgs_name_list = ["Garfield", "Tinkerbell", "Annie", "Loki", "Cleo", "Angel", "Bob", "Mia", "Coco", "Gracie", "Bear", "Bella", "Abby", "Harley", "Cali", "Leo", "Luna", "Jack", "Felix", "Kiki"];
+let profile_imgs_collections_list = ["notionists-neutral", "adventurer-neutral", "fun-emoji"];
 
 const userSchema = new mongoose.Schema({
+
     personal_info: {
         fullname: {
             type: String,
@@ -39,8 +32,8 @@ const userSchema = new mongoose.Schema({
         profile_img: {
             type: String,
             default: () => {
-                return profile_imgs[Math.floor(Math.random() * profile_imgs.length)];
-            }
+                return `https://api.dicebear.com/6.x/${profile_imgs_collections_list[Math.floor(Math.random() * profile_imgs_collections_list.length)]}/svg?seed=${profile_imgs_name_list[Math.floor(Math.random() * profile_imgs_name_list.length)]}`
+            } 
         },
     },
     admin: {
@@ -73,7 +66,7 @@ const userSchema = new mongoose.Schema({
             default: "",
         }
     },
-    account_info: {
+    account_info:{
         total_posts: {
             type: Number,
             default: 0
@@ -88,7 +81,7 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     blogs: {
-        type: [Schema.Types.ObjectId],
+        type: [ Schema.Types.ObjectId ],
         ref: 'blogs',
         default: [],
     },
@@ -100,26 +93,28 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    todos: [{
+    todos: [{ 
         type: Schema.Types.ObjectId,
         ref: 'Todo',
     }],
-    followers: [{
+    followers:[{
         type: Schema.Types.ObjectId,
-        ref: "users"
+        ref:"users"
     }],
-    following: [{
-        type: Schema.Types.ObjectId,
-        ref: "users"
+    following:[{
+        type:Schema.Types.ObjectId,
+        ref:"users"
     }],
     bookmarks: [{
         type: Schema.Types.ObjectId,
         ref: 'blogs'
     }]
-}, {
+},
+{ 
     timestamps: {
         createdAt: 'joinedAt'
-    }
-});
+    } 
+
+})
 
 export default mongoose.model("users", userSchema);
