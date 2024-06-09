@@ -1,7 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from 'url';
 
+// Recreate __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Set profile images folder
 const profile_imgs_folder = path.join(__dirname, 'public', 'avatars');
 let profile_imgs = fs.readdirSync(profile_imgs_folder).map(file => `/avatars/${file}`);
 
