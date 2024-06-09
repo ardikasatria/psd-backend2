@@ -132,6 +132,8 @@ const revokeGoogleTokens = async (accessToken) => {
     }
 };
 
+server.use(express.static(path.join(__dirname, 'public')));
+
 // upload image url route
 server.get('/get-upload-url', (req, res) => {
     generateUploadURL().then(url => res.status(200).json({ uploadURL: url }))
